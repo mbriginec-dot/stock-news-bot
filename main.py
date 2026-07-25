@@ -89,6 +89,7 @@ def main():
         s = sentiment.get("sentiment", {})
         bullish = s.get("bullishPercent", 0)
         bearish = s.get("bearishPercent", 0)
+        print(f"{ticker}: bullish={bullish}, bearish={bearish}")
 
         verdict = None
         if bullish >= THRESHOLD:
