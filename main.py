@@ -133,7 +133,7 @@ def main():
         # Зберігаємо тільки останні 50 id на тікер, щоб файл не розростався
         seen[ticker] = list(seen_ids)[-50:]
 
-        save_seen(seen)
+save_seen(seen)
 
 
 if __name__ == "__main__":
