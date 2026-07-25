@@ -15,7 +15,7 @@ FINNHUB_KEY = os.environ["FINNHUB_API_KEY"]
 TG_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 TG_CHAT = os.environ["TELEGRAM_CHAT_ID"]
 
-THRESHOLD = 0.80
+THRESHOLD = 0.01
 
 TICKERS_FILE = "tickers.txt"
 SEEN_FILE = "seen_news.json"
