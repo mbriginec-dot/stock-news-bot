@@ -15,7 +15,6 @@ FINNHUB_KEY = os.environ["FINNHUB_API_KEY"]
 TG_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 TG_CHAT = os.environ["TELEGRAM_CHAT_ID"]
 
-# Поріг "сильної" новини. 0.80 = 80%
 THRESHOLD = 0.80
 
 TICKERS_FILE = "tickers.txt"
@@ -79,7 +78,6 @@ def send_telegram(text):
 def main():
     tickers = load_tickers()
     seen = load_seen()
-    changed = False
 
     for ticker in tickers:
         try:
@@ -99,7 +97,6 @@ def main():
             verdict = f"⬇️ Сильний негативний новинний фон ({bearish * 100:.0f}% ведмежих новин за тиждень)"
 
         if verdict is None:
-            # Фон недостатньо сильний — пропускаємо цей тікер
             continue
 
         try:
@@ -116,7 +113,6 @@ def main():
                 continue
 
             seen_ids.add(news_id)
-            changed = True
 
             headline = item.get("headline", "(без заголовка)")
             url = item.get("url", "")
@@ -130,10 +126,9 @@ def main():
             )
             send_telegram(message)
 
-        # Зберігаємо тільки останні 50 id на тікер, щоб файл не розростався
         seen[ticker] = list(seen_ids)[-50:]
 
-save_seen(seen)
+    save_seen(seen)
 
 
 if __name__ == "__main__":
