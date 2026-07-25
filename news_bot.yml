@@ -1,0 +1,41 @@
+name: News Bot
+
+on:
+  schedule:
+    # Кожні 5 хвилин. GitHub може фактично запускати рідше (до ~15 хв)
+    # на безкоштовному тарифі для публічних репозиторіїв — це нормально.
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # дозволяє запустити вручну кнопкою на github.com
+
+permissions:
+  contents: write # потрібно, щоб бот міг зберігати seen_news.json назад у репозиторій
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run bot
+        run: python main.py
+        env:
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+      - name: Save seen_news.json back to repo (if changed)
+        run: |
+          git config user.name "news-bot"
+          git config user.email "news-bot@users.noreply.github.com"
+          git add seen_news.json
+          git diff --cached --quiet || git commit -m "update seen news"
+          git push
