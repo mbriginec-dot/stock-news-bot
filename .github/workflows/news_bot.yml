@@ -34,6 +34,6 @@ jobs:
         run: |
           git config user.name "news-bot"
           git config user.email "news-bot@users.noreply.github.com"
-          git add seen_news.json
+          git add seen_news.json company_names_cache.json
           git diff --cached --quiet || git commit -m "update seen news"
           git push
